@@ -1,13 +1,22 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import EstoqueView from "../views/EstoqueView.vue";
 import Login from "../views/Login.vue";
 import SignUp from "../views/SignUp.vue";
+import HomeView from "../views/HomeView.vue";
+import { getAuth } from "firebase/auth";
 
 const routes = [
   {
-    path: "/",
-    name: "home",
-    component: HomeView,
+    path: "/:catchAll(.*)",
+    redirect: "/",
+  },
+  {
+    path: "/estoque",
+    name: "estoque",
+    component: EstoqueView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/about",
@@ -28,11 +37,26 @@ const routes = [
     name: "signUp",
     component: SignUp,
   },
+  {
+    path: "/",
+    name: "home",
+    component: HomeView,
+  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && !currentUser) next("login");
+  else if (!requiresAuth && currentUser) next("estoque");
+  else next();
 });
 
 export default router;
