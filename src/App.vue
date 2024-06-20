@@ -1,12 +1,18 @@
 <template>
   <div class="content">
-    <router-view />
+    <Suspense>
+      <router-view />
+    </Suspense>
   </div>
 </template>
 <script>
+import { Suspense } from 'vue';
+
 export default {
   name: "App",
-  components: {},
+  components: {
+    Suspense
+  },
 };
 </script>
 <style>

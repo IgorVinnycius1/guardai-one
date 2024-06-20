@@ -4,43 +4,29 @@
     <header>
       <h1>Estoque</h1>
       <div class="search-add">
-        <input type="text" placeholder="Pesquisar compartimento" />
-        <button>+ Adicionar Compartimento</button>
+        <button @click="$router.replace('/estoque/criarCategoria')">+ Adicionar Compartimento</button>
       </div>
     </header>
     <div class="compartments">
       <div class="compartment" v-for="item in compartments" :key="item.title">
-        <h2>{{ item.title }}</h2>
+        <h2>{{ item.name }}</h2>
         <p>{{ item.description }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import SidebarComponent from "../components/SidebarComponent.vue";
+<script setup>
+import SidebarComponent from '@/components/SidebarComponent.vue';
+import axios from 'axios';
+import { reactive } from 'vue';
 
-export default {
-  name: "EstoqueView",
-  data() {
-    return {
-      compartments: [
-        { title: "Agulhas", description: "Agulhas para costurar na mão" },
-        { title: "Linhas", description: "Linhas para usar na agulha" },
-        { title: "Tecidos", description: "Tecidos para usar né, dur" },
-        { title: "Máquinas", description: "bip-bup, minhas máquinas!" },
-        {
-          title: "Bonecas",
-          description: "Bonecas lindas, tipo vc linda boneca",
-        },
-        { title: "Produtos", description: "Produtos que incomendaram" },
-      ],
-    };
-  },
-  components: {
-    SidebarComponent,
-  },
-};
+const user = JSON.parse(localStorage.getItem("User"))
+
+const stock = await axios.get(`http://localhost:3000/users/${user.id}/stocks`)
+const categories = await axios.get(`http://localhost:3000/stock/${stock.data[0].id}/categories`)
+
+const compartments = reactive(categories.data)
 </script>
 
 <style scoped>

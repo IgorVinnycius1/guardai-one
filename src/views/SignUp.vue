@@ -1,6 +1,10 @@
 <template>
   <div class="sign-up">
     <h1>Crie uma nova conta</h1>
+    <input type="text" placeholder="Primeiro nome" v-model="firstName" />
+    <br />
+    <input type="text" placeholder="Segundo nome" v-model="secondName" />
+    <br />
     <input type="text" placeholder="Email" v-model="email" />
     <br />
     <input type="password" placeholder="Senha" v-model="senha" />
@@ -16,39 +20,76 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { initializeApp } from "firebase/app";
+import axios from "axios"
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { initializeApp } from "firebase/app";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD2u1erHZLpulbdC4KI3LAU2FwtnoFUQi4",
-  authDomain: "guardai-389da.firebaseapp.com",
-  projectId: "guardai-389da",
-  storageBucket: "guardai-389da.appspot.com",
-  messagingSenderId: "961333327773",
-  appId: "1:961333327773:web:090c7901657f2e74bd6174",
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD2u1erHZLpulbdC4KI3LAU2FwtnoFUQi4",
+//   authDomain: "guardai-389da.firebaseapp.com",
+//   projectId: "guardai-389da",
+//   storageBucket: "guardai-389da.appspot.com",
+//   messagingSenderId: "961333327773",
+//   appId: "1:961333327773:web:090c7901657f2e74bd6174",
+// };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
 
 export default {
   name: "SignUpPage",
   data() {
     return {
+      firstName: "",
+      secondName: "",
       email: "",
       senha: "",
     };
   },
   methods: {
-    signUp() {
-      createUserWithEmailAndPassword(auth, this.email, this.senha)
-        .then((user) => {
-          this.$router.replace("/");
-          alert(`Bem Vindo, ${user}`);
+    async signUp() {
+      try{
+        const response = await axios.post("http://localhost:3000/users",
+          {
+            firstName: this.firstName,
+            secondName: this.secondName,
+            email: this.email,
+            password: this.senha
+          }
+        )
+
+      if(response.status == 201){
+        const login = await axios.post("http://localhost:3000/users/login",{
+          email: this.email,
+          password: this.senha
         })
-        .catch((err) => {
-          alert("Aconteceu algo inesperado: " + err.message);
-        });
+
+        localStorage.setItem("UserToken", login.data.token)
+        localStorage.setItem("User", JSON.stringify(login.data.user))
+
+        await axios.post("http://localhost:3000/stocks",{
+          name: `Estoque de ${response.data.firstName}`
+        },{
+          headers:{
+            Authorization: `Bearer ${login.data.token}`
+          }
+        })
+
+        this.$router.replace("/estoque");
+      }
+      } catch(err){
+        alert(err.response.data.error)
+      }
+
+
+      // createUserWithEmailAndPassword(auth, this.email, this.senha)
+      //   .then((user) => {
+      //     this.$router.replace("/");
+      //     alert(`Bem Vindo, ${user}`);
+      //   })
+      //   .catch((err) => {
+      //     alert("Aconteceu algo inesperado: " + err.message);
+      //   });
     },
   },
 };

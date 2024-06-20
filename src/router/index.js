@@ -3,7 +3,8 @@ import EstoqueView from "../views/EstoqueView.vue";
 import Login from "../views/Login.vue";
 import SignUp from "../views/SignUp.vue";
 import HomeView from "../views/HomeView.vue";
-import { getAuth } from "firebase/auth";
+import criarCategoria from "../views/criarCategoria.vue";
+// import { getAuth } from "firebase/auth";
 
 const routes = [
   {
@@ -14,9 +15,14 @@ const routes = [
     path: "/estoque",
     name: "estoque",
     component: EstoqueView,
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
+  },
+  {
+    path: "/estoque/criarCategoria",
+    name: "criarCategoria",
+    component: criarCategoria,
   },
   {
     path: "/about",
@@ -49,14 +55,14 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+// router.beforeEach((to, from, next) => {
+//   const auth = getAuth();
+//   const currentUser = auth.currentUser;
+//   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (requiresAuth && !currentUser) next("login");
-  else if (!requiresAuth && currentUser) next("estoque");
-  else next();
-});
+//   if (requiresAuth && !currentUser) next("login");
+//   else if (!requiresAuth && currentUser) next("estoque");
+//   else next();
+// });
 
 export default router;

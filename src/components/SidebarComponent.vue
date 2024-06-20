@@ -26,15 +26,9 @@
             <a href="#"><i class="icon">⚙️</i> Configurações</a>
           </li>
           <li>
-            <a href="#"><i class="icon">🚪</i> Sair da conta</a>
-          </li>
-          <li>
-            <a href="#"><i class="icon">❓</i> Ajuda</a>
+            <a href="#" @click="sair"><i class="icon">🚪</i> Sair da conta</a>
           </li>
           <br>
-          <li>
-            <a href="#" @click="sair">Sair</a>
-          </li>
         </ul>
       </nav>
     </div>
@@ -43,7 +37,7 @@
 </template>
 
 <script>
-import { getAuth, signOut } from 'firebase/auth';
+// import { getAuth, signOut } from 'firebase/auth';
 
 export default {
   name: "SidebarComponent",
@@ -56,13 +50,16 @@ export default {
     toggleSidebar() {
       this.isActive = !this.isActive;
     },
-    sair() {
-      const auth = getAuth();
-      signOut(auth).then(() => {
-        this.$router.replace('login');
-      }).catch((error) => {
-        console.error("Error signing out: ", error);
-      });
+    async sair() {
+      localStorage.clear()
+      this.$router.replace("/login")
+
+      // const auth = getAuth();
+      // signOut(auth).then(() => {
+      //   this.$router.replace('login');
+      // }).catch((error) => {
+      //   console.error("Error signing out: ", error);
+      // });
     },
   },
 };

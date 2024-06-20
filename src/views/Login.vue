@@ -18,7 +18,9 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import axios from 'axios';
+
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
   name: "LoginPage",
@@ -29,16 +31,34 @@ export default {
     };
   },
   methods: {
-    login() {
-      const auth = getAuth();
-      signInWithEmailAndPassword(auth, this.email, this.senha)
-        .then((user) => {
-          this.$router.replace("/");
-          alert(`Bem Vindo ${{ user }}`);
+    async login() {
+      try{
+        const response = await axios.post("http://localhost:3000/users/login",{
+          email: this.email,
+          password: this.senha
         })
-        .catch((err) => {
-          alert("Não foi possível realizar o login. " + err.message);
-        });
+
+        // console.log(JSON.stringify(response.data.user))
+  
+        if(response.status == 200){
+          localStorage.setItem("UserToken", response.data.token)
+          localStorage.setItem("User", JSON.stringify(response.data.user))
+          this.$router.replace("/estoque")
+        }
+      } catch(err){
+        alert(err.response.data.error)
+      }
+
+
+      // const auth = getAuth();
+      // signInWithEmailAndPassword(auth, this.email, this.senha)
+      //   .then((user) => {
+      //     this.$router.replace("/");
+      //     alert(`Bem Vindo ${{ user }}`);
+      //   })
+      //   .catch((err) => {
+      //     alert("Não foi possível realizar o login. " + err.message);
+      //   });
     },
   },
 };
