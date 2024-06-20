@@ -1,4 +1,4 @@
-# vue-auth-firebase
+# guardai-one
 
 ## Project setup
 ```
