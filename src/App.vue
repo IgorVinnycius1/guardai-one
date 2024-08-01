@@ -1,35 +1,9 @@
-<template>
-  <div class="content">
-    <Suspense>
-      <router-view />
-    </Suspense>
-  </div>
-</template>
 <script>
-import { Suspense } from 'vue';
-
-export default {
-  name: "App",
-  components: {
-    Suspense
-  },
-};
+import { RouterView } from 'vue-router'
 </script>
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
-}
+<template>
+<RouterView />
+</template>
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-</style>
+<style scoped></style>
