@@ -1,10 +1,31 @@
 <script>
 import LoginInputText from '@/components/LoginInputText.vue';
+import { createUser } from '@/functions/userFunctions';
 
 export default {
     name: 'LoginView',
     components: {
         LoginInputText
+    },
+    methods: {
+        async signUpHandler() {
+            const userData = {
+                firstName: 'Elias',
+                secondName: 'Pinheiro',
+                email: 'elias@email.com',
+                password: 'senha123'
+            }
+
+            const result = await createUser(userData)
+
+            // Tem que fazer um tratamento de erro melhor
+            if (!result) {
+                console.log("Erro ao cadastrar");
+                return
+            }
+
+            this.$router.push('/home')
+        }
     }
 }
 </script>
@@ -43,7 +64,8 @@ export default {
 
             <LoginInputText placeholder="Senha" />
 
-            <button class="w-full bg-sky-500 text-white text-lg font-semibold py-1 px-4 rounded-2xl">Cadastrar</button>
+            <button class="w-full bg-sky-500 text-white text-lg font-semibold py-1 px-4 rounded-2xl"
+                    @click="(e) => { e.preventDefault(); signUpHandler() }">Cadastrar</button>
 
             <!-- Que nem a gente tinha conversado, não se se isso vai rolar -->
             <button class="w-full bg-gray-200 text-gray-400 text-sm font-semibold py-2 px-4 rounded-2xl">

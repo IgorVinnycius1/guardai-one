@@ -35,7 +35,7 @@ export async function getUserById(id) {
     password: string
 }
 */
-export async function signUpUser(userData) {
+export async function createUser(userData) {
     try {
         const response = await axios.post(`${API_URL}/users`, userData)
         const data = response.data
@@ -112,6 +112,7 @@ export async function loginUser(email, password) {
 
 
 export function userLoginVerify() {
+    // Se o localhost tiver o token mas com um valor vaziu da erro
     const user = JSON.parse(localStorage.getItem("User"))
     const token = localStorage.getItem("Token")
 

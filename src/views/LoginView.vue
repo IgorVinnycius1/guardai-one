@@ -1,5 +1,6 @@
 <script>
 import LoginInputText from '@/components/LoginInputText.vue';
+import { loginEmployee } from '@/functions/employeeFunctions';
 import { loginUser } from '@/functions/userFunctions';
 
 export default {
@@ -8,12 +9,26 @@ export default {
         async login() {
             const result = await loginUser('elias@email.com', 'senha123')
 
+            // Fazer um tratamento de erro melhor
             if (!result) {
                 console.log("Erro ao logar")
                 return
             }
 
             this.$router.push('/home')
+        },
+
+        async employeeLoginHandler() {
+            const result = await loginEmployee('igor_estoque_a', 'senha123')
+
+            if (!result) {
+                console.log("não logou com a conta do funcionario")
+                return
+            }
+
+
+
+            this.$router.push(`/stock/${result.employee.idStock}`)
         }
     },
     components: {
@@ -42,7 +57,8 @@ export default {
             </p>
             <p>
                 Caso você possua uma conta de funcionário, você pode logar por
-                <span class="text-amber-500">aqui</span>
+                <span class="text-amber-500"
+                      @click="employeeLoginHandler()">aqui</span>
             </p>
         </div>
     </div>

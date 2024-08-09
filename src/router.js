@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('./views/ManagerHomeView.vue')
     },
     {
+      path: '/stock/:id/employee-management',
+      name: 'EmployeeManagement',
+      component: () => import('./views/EmployeeManagement.vue')
+    },
+    {
       path: '/stock/:id',
       name: 'StockPage',
       component: () => import('./views/StockView.vue')

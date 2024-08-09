@@ -43,7 +43,7 @@ export async function createEmployee(stockId, employeeData, userToken = undefine
     }
 
     try {
-        const response = await axios.post(`${API_URL}/stocks/${stockId}/employees`,
+        const response = await axios.post(`${API_URL}/stock/${stockId}/employees`,
             employeeData,
             {
                 headers: {
@@ -65,11 +65,11 @@ export async function loginEmployee(username, password) {
         const response = await axios.post(`${API_URL}/employees/login`, {
             username, password
         })
+        const data = response.data
 
         localStorage.setItem("Token", data.token)
-        localStorage.setItem("User", JSON.stringify(data.user))
+        localStorage.setItem("User", JSON.stringify(data.employee))
 
-        const data = response.data
 
         return data
     } catch (err) {
@@ -128,7 +128,7 @@ export async function changeEmployeePermissions(id, permissionsData, userToken =
     }
 
     try {
-        const response = await axios.patch(`${API_URL}/employees/${id}`,
+        const response = await axios.patch(`${API_URL}/employees/${id}/permissions`,
             permissionsData,
             {
                 headers: {

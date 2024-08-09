@@ -42,8 +42,11 @@ export default {
 
 <hr class="my-4">
 
-<button class="py-2 px-4 bg-sky-500 mt-2 text-white"
-        @click="createStockHandler('Estoque do Igor', 'sdasdasd')">Criar estoque</button>
+<div>
+    <button class="py-2 px-4 bg-sky-500 mt-2 text-white"
+            @click="createStockHandler('Estoque do Igor', 'sdasdasd')">Criar estoque</button>
+    <i>Ta com dados hardcoded</i>
+</div>
 </template>
 
 <style scoped></style>
